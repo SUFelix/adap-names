@@ -8,66 +8,83 @@ export class StringArrayName extends AbstractName {
 
     constructor(other: string[], delimiter?: string) {
         super();
-        throw new Error("needs implementation");
+        this.components = other
     }
 
     public clone(): Name {
-        throw new Error("needs implementation");
+       return super.clone()
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation");
+        this.assertIsValidDelChar(delimiter);
+        
+        return super.asString(delimiter);
     }
 
     public toString(): string {
-        throw new Error("needs implementation");
+        return super.toString();
     }
 
     public asDataString(): string {
-        throw new Error("needs implementation");
+        return super.asDataString();
     }
 
     public isEqual(other: Name): boolean {
-        throw new Error("needs implementation");
+        this.assertIsNotNullOrUndefined(other);
+
+        return super.isEqual(other);
     }
 
     public getHashCode(): number {
-        throw new Error("needs implementation");
+        return super.getHashCode();
     }
 
     public isEmpty(): boolean {
-        throw new Error("needs implementation");
+        return super.isEmpty();
     }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation");
+        return super.getDelimiterCharacter();
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation");
+        return this.components.length
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation");
+        this.assertIsNumberInRange(i);
+
+        return this.components[i];
     }
 
     public setComponent(i: number, c: string) {
-        throw new Error("needs implementation");
+        this.assertIsNotNullOrUndefined(c)
+
+        this.components.splice(i,1,c);
     }
 
     public insert(i: number, c: string) {
-        throw new Error("needs implementation");
+        this.assertIsNumberInRange(i);
+        this.assertIsNotNullOrUndefined(c);
+
+        this.components.splice(i,0,c);
     }
 
     public append(c: string) {
-        throw new Error("needs implementation");
+        this.assertIsNotNullOrUndefined(c)
+
+        this.components.push(c);
     }
 
     public remove(i: number) {
-        throw new Error("needs implementation");
+        this.assertIsNumberInRange(i);
+
+        this.components.splice(i,1)
     }
 
     public concat(other: Name): void {
-        throw new Error("needs implementation");
+        this.assertIsNotNullOrUndefined(other);
+
+        super.concat(other);
     }
 }
