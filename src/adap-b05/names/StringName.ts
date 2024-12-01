@@ -1,6 +1,7 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
 import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
+import { MethodFailedException } from "../common/MethodFailedException";
 
 export class StringName extends AbstractName {
 
@@ -9,63 +10,132 @@ export class StringName extends AbstractName {
 
     constructor(other: string, delimiter?: string) {
         super();
-        throw new Error("needs implementation or deletion");
+        this.name = other;
+        this.noComponents = this.name.length
     }
 
     public clone(): Name {
-        throw new Error("needs implementation or deletion");
+       return super.clone();
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+        this.assertClassInvariants();
+
+        return super.asString(delimiter);
+    }
+
+    public toString(): string {
+        return super.toString();
     }
 
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+        return super.asDataString();
     }
 
     public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
+        this.assertIsNotNullOrUndefined(other);
+
+        return super.isEqual(other);
     }
 
     public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
+        return super.getHashCode();
     }
 
     public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+        return super.isEmpty();
     }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        let del = super.getDelimiterCharacter();
+
+        this.assertClassInvariants();
+
+        return del;
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        this.assertClassInvariants();
+
+        const array = this.splitByDelimiter(this.name,this.delimiter);
+
+        this.assertIsNotNullOrUndefined(array.length);
+
+        return array.length;
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        this.assertIsNumberInRange(i);
+
+        const array = this.splitByDelimiter(this.name,this.delimiter);
+
+        this.assertIsNotNullOrUndefined(array[i]);
+
+        return array[i];
     }
 
     public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        this.assertIsNumberInRange(i);
+        this.assertIsNotNullOrUndefined(c);
+
+        let array = this.splitByDelimiter(this.name,this.delimiter);
+        array[i] = c;
+        this.name = this.arrayToString(array);
     }
 
     public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        this.assertIsNumberInRange(i);
+        this.assertIsNotNullOrUndefined(c);
+
+        const oldNoComponents: number = this.getNoComponents();
+        this.doInsert(i, c);
+
+        const condition: boolean = this.getNoComponents() == (oldNoComponents + 1);
+        MethodFailedException.assertCondition(condition);
+    }
+
+    private doInsert(i: number, c: string) {
+        let array = this.splitByDelimiter(this.name, this.delimiter);
+        array.splice(i, 0, c);
+        this.name = this.arrayToString(array);
     }
 
     public append(c: string) {
-        throw new Error("needs implementation or deletion");
+        this.assertIsNotNullOrUndefined(c);
+
+        this.name += (this.delimiter + c);
     }
 
     public remove(i: number) {
-        throw new Error("needs implementation or deletion");
+        this.assertIsNumberInRange(i);
+
+        let array = this.splitByDelimiter(this.name,this.delimiter);
+        array.splice(i,1)
+        this.name = this.arrayToString(array);
     }
 
     public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+        this.assertIsNotNullOrUndefined(other);
+
+        super.concat(other);
+    }
+
+    private splitByDelimiter(input:string,delimiter:string):string[]{
+        return input.split(delimiter)
+    }
+    private arrayToString(array:string[],delimiter: string = this.delimiter): string {
+        let name: string = ''
+
+        array.forEach(element => {
+            if (name.length == 0){
+                name += element
+            }else{
+            name += delimiter
+            name += element
+            }
+        });
+
+        return name
     }
 
 }

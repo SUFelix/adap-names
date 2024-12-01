@@ -1,9 +1,12 @@
 import { ExceptionType, AssertionDispatcher } from "../common/AssertionDispatcher";
+import { Exception } from "../common/Exception";
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
 import { InvalidStateException } from "../common/InvalidStateException";
+import { ServiceFailureException } from "../common/ServiceFailureException";
 
 import { Name } from "../names/Name";
 import { Directory } from "./Directory";
+import { RootNode } from "./RootNode";
 
 export class Node {
 
@@ -58,8 +61,40 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        try{
+        let currentNode: Node = this!;
+        while(!(currentNode.getParentNode() instanceof RootNode)){
+            currentNode = currentNode.getParentNode();
+        }
+        currentNode = currentNode.getParentNode();
+
+        let result: Set<Node> = new Set();
+        
+        findNodesFromStartnode(currentNode);
+        
+        return result;
+    
+        function findNodesFromStartnode(currentNode: Node) {
+
+            currentNode.assertClassInvariants();
+
+            if (currentNode instanceof Directory) {
+                for (const child of currentNode.getChildNodes()) {
+                    if (child.getBaseName() === bn) {
+                        result.add(child); 
+                    }
+                    findNodesFromStartnode(child);
+                }
+            }
+            else if (currentNode instanceof File && currentNode.getBaseName() === bn) {
+                result.add(currentNode); 
+            }
+        }}
+        catch(exeption:any){
+            throw new ServiceFailureException("service failed", exeption);
+        }
     }
+    
 
     protected assertClassInvariants(): void {
         const bn: string = this.doGetBaseName();
@@ -70,5 +105,4 @@ export class Node {
         const condition: boolean = (bn != "");
         AssertionDispatcher.dispatch(et, condition, "invalid base name");
     }
-
 }

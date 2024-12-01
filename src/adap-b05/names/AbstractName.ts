@@ -1,44 +1,81 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
 import { Name } from "./Name";
+import { ExceptionType } from "../common/AssertionDispatcher";
 
 export abstract class AbstractName implements Name {
 
     protected delimiter: string = DEFAULT_DELIMITER;
 
     constructor(delimiter: string = DEFAULT_DELIMITER) {
-        throw new Error("needs implementation or deletion");
+        this.delimiter = delimiter
     }
 
     public clone(): Name {
-        throw new Error("needs implementation or deletion");
+        const clonedObject = Object.create(this)
+        clonedObject.delimiter = this.delimiter
+        return clonedObject
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+        let name: string = ''
+        const noOfComponents = this.getNoComponents();
+
+        for (let i = 0; i < noOfComponents; i++) {
+
+            if (name.length == 0){
+                name += this.getComponent(i)
+            }else{
+            name += delimiter
+            name += this.getComponent(i)
+            }
+        }
+
+        return name
     }
 
     public toString(): string {
-        return this.asDataString();
+        let name: string = ''
+        const noOfComponents = this.getNoComponents();
+
+        for (let i = 0; i < noOfComponents; i++) {
+            name += this.getComponent(i)
+        }
+
+        return name
     }
 
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+        return this.asString(ESCAPE_CHARACTER + this.delimiter)
     }
 
     public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
+        if(other.getNoComponents() != this.getNoComponents())
+            return false
+        for (let i = 1; i <= other.getNoComponents(); i++) {
+           if (this.getComponent(i) != (other.getComponent(i)))
+            return false
+        }
+        return true
     }
 
     public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
+        let hashCode: number = 0;
+        const s: string = this.asDataString();
+        for (let i = 0; i < s.length; i++) {
+            let c = s.charCodeAt(i);
+            hashCode = (hashCode << 5) - hashCode + c;
+            hashCode |= 0;
+        }
+        return hashCode;
     }
 
     public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+        return (this.getNoComponents() == 0)
     }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return (this.getDelimiterCharacter())
     }
 
     abstract getNoComponents(): number;
@@ -51,7 +88,25 @@ export abstract class AbstractName implements Name {
     abstract remove(i: number): void;
 
     public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+        for (let i = 1; i <= other.getNoComponents(); i++) {
+            this.append( other.getComponent(i))
+        }
+    }
+    protected assertIsNotNullOrUndefined(other: Object): void {
+        let condition: boolean = !IllegalArgumentException.isNullOrUndefined(other);
+        IllegalArgumentException.assertCondition(condition, "null or undefined argument");        
+    }
+
+    protected assertIsValidDelChar(d: string, et: ExceptionType) {
+        let condition: boolean = (d.length == 1);
+        IllegalArgumentException.assertCondition(condition, "invalid delimiter character");
+    }
+    protected assertIsNumberInRange(i: number) {
+        let condition: boolean = (this.getNoComponents() >= i);
+        IllegalArgumentException.assertCondition(condition, "invalid number");
+    }
+    protected assertClassInvariants(): void {
+        this.assertIsValidDelChar(this.delimiter, ExceptionType.CLASS_INVARIANT);
     }
 
 }

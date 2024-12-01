@@ -1,4 +1,4 @@
-import { Node } from "./Node";
+import { Node } from "../../../src/adap-b05/files/Node";
 
 export class Directory extends Node {
 
@@ -10,6 +10,9 @@ export class Directory extends Node {
 
     public add(cn: Node): void {
         this.childNodes.add(cn);
+    }
+    public getChildNodes(): Set<Node>{
+        return this.childNodes;
     }
 
     public remove(cn: Node): void {
