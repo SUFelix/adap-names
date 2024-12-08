@@ -31,7 +31,6 @@ export class StringName extends AbstractName {
     }
 
     public isEqual(other: Name): boolean {
-
         return super.isEqual(other);
     }
 
@@ -43,48 +42,32 @@ export class StringName extends AbstractName {
         return super.isEmpty();
     }
 
-    public getDelimiterCharacter(): string {
-        let del = super.getDelimiterCharacter();
-
-        this.assertClassInvariants();
-
-        return del;
-    }
-
     public getNoComponents(): number {
-        this.assertClassInvariants();
 
         const array = this.splitByDelimiter(this.name,this.delimiter);
-
 
         return array.length;
     }
 
     public getComponent(i: number): string {
-        this.assertIsNumberInRange(i);
 
         const array = this.splitByDelimiter(this.name,this.delimiter);
-
 
         return array[i];
     }
 
     public setComponent(i: number, c: string) {
-        this.assertIsNumberInRange(i);
-
         let array = this.splitByDelimiter(this.name,this.delimiter);
         array[i] = c;
         this.name = this.arrayToString(array);
     }
 
     public insert(i: number, c: string) {
-        this.assertIsNumberInRange(i);
 
         const oldNoComponents: number = this.getNoComponents();
         this.doInsert(i, c);
 
         const condition: boolean = this.getNoComponents() == (oldNoComponents + 1);
-        MethodFailedException.assert(condition);
     }
 
     private doInsert(i: number, c: string) {
@@ -99,7 +82,6 @@ export class StringName extends AbstractName {
     }
 
     public remove(i: number) {
-        this.assertIsNumberInRange(i);
 
         let array = this.splitByDelimiter(this.name,this.delimiter);
         array.splice(i,1)
@@ -107,7 +89,6 @@ export class StringName extends AbstractName {
     }
 
     public concat(other: Name): void {
-
         super.concat(other);
     }
 

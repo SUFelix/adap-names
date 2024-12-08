@@ -94,15 +94,15 @@ export abstract class AbstractName implements Name {
     }
     protected assertIsNotNullOrUndefined(other: Object): void {
         let condition: boolean = !IllegalArgumentException.isNullOrUndefined(other);
-        IllegalArgumentException.assertCondition(condition, "null or undefined argument");        
+        IllegalArgumentException.assert(condition, "null or undefined argument");        
     }
 
     protected assertIsValidDelChar(d: string) {
         let condition: boolean = (d.length == 1);
-        IllegalArgumentException.assertCondition(condition, "invalid delimiter character");
+        IllegalArgumentException.assert(condition, "invalid delimiter character");
     }
     protected assertIsNumberInRange(i: number) {
         let condition: boolean = (this.getNoComponents() >= i);
-        IllegalArgumentException.assertCondition(condition, "invalid number");
+        IllegalArgumentException.assert(condition, "invalid number");
     }
 }

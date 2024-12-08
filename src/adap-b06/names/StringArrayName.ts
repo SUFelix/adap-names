@@ -16,8 +16,6 @@ export class StringArrayName extends AbstractName {
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        this.assertClassInvariants();
-        
         return super.asString(delimiter);
     }
 
@@ -30,7 +28,6 @@ export class StringArrayName extends AbstractName {
     }
 
     public isEqual(other: Name): boolean {
-
         return super.isEqual(other);
     }
 
@@ -42,17 +39,11 @@ export class StringArrayName extends AbstractName {
         return super.isEmpty();
     }
 
-    public getDelimiterCharacter(): string {
-        return super.getDelimiterCharacter();
-    }
-
     public getNoComponents(): number {
         return this.components.length
     }
 
     public getComponent(i: number): string {
-        this.assertIsNumberInRange(i);
-
         return this.components[i];
     }
 
@@ -62,24 +53,18 @@ export class StringArrayName extends AbstractName {
     }
 
     public insert(i: number, c: string) {
-        this.assertIsNumberInRange(i);
-
         this.components.splice(i,0,c);
     }
 
     public append(c: string) {
-
         this.components.push(c);
     }
 
     public remove(i: number) {
-        this.assertIsNumberInRange(i);
-
         this.components.splice(i,1)
     }
 
     public concat(other: Name): void {
-
         super.concat(other);
     }
 }

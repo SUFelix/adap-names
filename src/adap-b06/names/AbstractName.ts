@@ -49,13 +49,8 @@ export abstract class AbstractName implements Name {
     }
 
     public isEqual(other: Name): boolean {
-        if(other.getNoComponents() != this.getNoComponents())
-            return false
-        for (let i = 1; i <= other.getNoComponents(); i++) {
-           if (this.getComponent(i) != (other.getComponent(i)))
-            return false
-        }
-        return true
+        return (this.delimiter == other.getDelimiterCharacter()
+            && this.asDataString() == other.asDataString());
     }
 
     public getHashCode(): number {
@@ -92,8 +87,7 @@ export abstract class AbstractName implements Name {
         }
     }
 
-    protected assertIsNumberInRange(i: number) {
-        let condition: boolean = (this.getNoComponents() >= i);
-        IllegalArgumentException.assert(condition, "invalid number");
+    protected assertIsNumberInRange(i: number): void {
+        IllegalArgumentException.assert(i >= 0 && i < this.getNoComponents(), "Illegal index!");
     }
 }

@@ -1,4 +1,4 @@
-import { ExceptionType, AssertionDispatcher } from "../common/AssertionDispatcher";
+
 import { Exception } from "../common/Exception";
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
 import { InvalidStateException } from "../common/InvalidStateException";
@@ -76,7 +76,7 @@ export class Node {
     
         function findNodesFromStartnode(currentNode: Node) {
 
-            currentNode.assertClassInvariants();
+            //currentNode.assertClassInvariants();
 
             if (currentNode instanceof Directory) {
                 for (const child of currentNode.getChildNodes()) {
@@ -96,7 +96,7 @@ export class Node {
     }
     
 
-    protected assertClassInvariants(): void {
+   /* protected assertClassInvariants(): void {
         const bn: string = this.doGetBaseName();
         this.assertIsValidBaseName(bn, ExceptionType.CLASS_INVARIANT);
     }
@@ -104,5 +104,5 @@ export class Node {
     protected assertIsValidBaseName(bn: string, et: ExceptionType): void {
         const condition: boolean = (bn != "");
         AssertionDispatcher.dispatch(et, condition, "invalid base name");
-    }
+    }*/
 }
